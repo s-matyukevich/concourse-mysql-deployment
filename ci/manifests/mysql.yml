@@ -141,6 +141,9 @@ variables:
 - name: cf_mysql_smoke_tests_db_password
   type: password
 
+releases:
+- name: cf-mysql-custom
+  version: latest 
 stemcells:
 - alias: default
   os: ubuntu-trusty
