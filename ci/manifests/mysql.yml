@@ -18,18 +18,19 @@ instance_groups:
   persistent_disk: 10000
   jobs:
   - name: mysql
-    release: cf-mysql
+    release: cf-mysql-custom
     properties:
       cf_mysql:
         mysql:
           admin_password: ((cf_mysql_mysql_admin_password))
+          remote_admin_access: true
           cluster_health:
             password: ((cf_mysql_mysql_cluster_health_password))
           galera_healthcheck:
             endpoint_password: ((cf_mysql_mysql_galera_healthcheck_endpoint_password))
             db_password: ((cf_mysql_mysql_galera_healthcheck_db_password))
   - name: smoke-tests-user
-    release: cf-mysql
+    release: cf-mysql-custom
     properties:
       cf_mysql:
         smoke_tests:
@@ -42,7 +43,7 @@ instance_groups:
   vm_type: default
   stemcell: default
   jobs:
-  - release: cf-mysql
+  - release: cf-mysql-custom
     name: arbitrator
     properties:
       cf_mysql:
@@ -59,7 +60,7 @@ instance_groups:
   stemcell: default
   jobs:
   - name: proxy
-    release: cf-mysql
+    release: cf-mysql-custom
     properties:
       cf_mysql:
         proxy:
@@ -77,7 +78,7 @@ instance_groups:
   vm_type: default
   stemcell: default
   jobs:
-  - {release: cf-mysql, name: bootstrap}
+  - {release: cf-mysql-custom, name: bootstrap}
 
 - name: rejoin-unsafe-vm
   instances: 1
@@ -87,7 +88,7 @@ instance_groups:
   vm_type: default
   stemcell: default
   jobs:
-  - {release: cf-mysql, name: rejoin-unsafe}
+  - {release: cf-mysql-custom, name: rejoin-unsafe}
 
 - name: verify-cluster-schemas-vm
   instances: 1
@@ -98,7 +99,7 @@ instance_groups:
   stemcell: default
   jobs:
   - name: verify-cluster-schemas
-    release: cf-mysql
+    release: cf-mysql-custom
     properties:
       cf_mysql:
         mysql:
@@ -115,7 +116,7 @@ instance_groups:
   stemcell: default
   jobs:
   - name: smoke-tests
-    release: cf-mysql
+    release: cf-mysql-custom
     properties:
       cf_mysql:
         mysql:
@@ -140,11 +141,6 @@ variables:
 - name: cf_mysql_smoke_tests_db_password
   type: password
 
-releases:
-- name: cf-mysql
-  url: https://bosh.io/d/github.com/cloudfoundry/cf-mysql-release?v=36.14.0
-  version: 36.14.0
-  sha1: 383f70fd4d776bf91d9043d8fd9ad79516cc8478
 stemcells:
 - alias: default
   os: ubuntu-trusty
