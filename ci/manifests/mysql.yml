@@ -219,7 +219,7 @@ instance_groups:
           cookie_secret: ((cf_mysql_broker_cookie_secret))
           db_password: ((cf_mysql_broker_db_password))
           disable_quota_enforcer: true
-          services: &broker_services
+          services: *broker_services
         external_host: ((broker_ip_dc2))
         mysql:
           persistent_disk: 10000
@@ -375,7 +375,7 @@ instance_groups:
       cf:
         skip_ssl_validation: ((cf_skip_ssl_validation_dc1))
         admin_username: admin
-        admin_password: ((admin_password_dc1))
+        admin_password: ((cf_admin_password_dc1))
         api_url: ((cf_api_url_dc1))
       cf_mysql:
         external_host: ((broker_ip_dc1))
@@ -406,7 +406,7 @@ instance_groups:
       cf:
         skip_ssl_validation: ((cf_skip_ssl_validation_dc2))
         admin_username: admin
-        admin_password: ((admin_password_dc2))
+        admin_password: ((cf_admin_password_dc2))
         api_url: ((cf_api_url_dc2))
       cf_mysql:
         external_host: ((broker_ip_dc2))
