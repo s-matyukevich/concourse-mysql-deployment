@@ -16,6 +16,10 @@ instance_groups:
   vm_type: large
   stemcell: default
   persistent_disk: 10000
+  provides:
+    mysql: {as: mysql}
+  consumes: 
+    mysql: {from: mysql}
   jobs: &mysql_jobs
   - name: mysql
     release: cf-mysql-custom
@@ -51,6 +55,10 @@ instance_groups:
   vm_type: large
   stemcell: default
   persistent_disk: 10000
+  provides:
+    mysql: {as: mysql}
+  consumes: 
+    mysql: {from: mysql}
   jobs: *mysql_jobs
 
 - name: arbitrator
