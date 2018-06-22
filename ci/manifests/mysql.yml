@@ -16,7 +16,7 @@ instance_groups:
   vm_type: large
   stemcell: default
   persistent_disk: 10000
-  jobs: &mysql_jobs
+  jobs: 
   - name: mysql
     release: cf-mysql-custom
     provides:
@@ -24,7 +24,7 @@ instance_groups:
     consumes: 
       mysql: {from: mysql_dc1}
       mysql: {from: mysql_dc2}
-    properties:
+    properties: &mysql_properties
       cf_mysql:
         mysql:
           innodb_buffer_pool_size: 128M
@@ -58,7 +58,14 @@ instance_groups:
   vm_type: large
   stemcell: default
   persistent_disk: 10000
-  jobs: *mysql_jobs
+  - name: mysql
+    release: cf-mysql-custom
+    provides:
+      mysql: {as: mysql_dc2}
+    consumes: 
+      mysql: {from: mysql_dc1}
+      mysql: {from: mysql_dc2}
+    properties: *mysql_properties
 
 - name: arbitrator
   instances: 1
