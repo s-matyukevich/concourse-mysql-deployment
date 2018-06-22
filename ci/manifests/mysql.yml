@@ -16,14 +16,14 @@ instance_groups:
   vm_type: large
   stemcell: default
   persistent_disk: 10000
-  provides:
-    mysql: {as: mysql_dc1}
-  consumes: 
-    mysql: {from: mysql_dc1}
-    mysql: {from: mysql_dc2}
   jobs: &mysql_jobs
   - name: mysql
     release: cf-mysql-custom
+    provides:
+      mysql: {as: mysql_dc1}
+    consumes: 
+      mysql: {from: mysql_dc1}
+      mysql: {from: mysql_dc2}
     properties:
       cf_mysql:
         mysql:
@@ -44,6 +44,8 @@ instance_groups:
           db_password: ((cf_mysql_smoke_tests_db_password))
   - name: cf-mysql-broker-user
     release: cf-mysql-custom
+    consumes:
+      broker: {from: broker_dc1}
     properties:
       cf_mysql:
         smoke_tests:
@@ -56,11 +58,6 @@ instance_groups:
   vm_type: large
   stemcell: default
   persistent_disk: 10000
-  provides:
-    mysql: {as: mysql_dc2}
-  consumes: 
-    mysql: {from: mysql_dc1}
-    mysql: {from: mysql_dc2}
   jobs: *mysql_jobs
 
 - name: arbitrator
@@ -69,12 +66,12 @@ instance_groups:
   networks: [{name: default_dc1}]
   vm_type: default
   stemcell: default
-  consumes: 
-    mysql: {from: mysql_dc1}
-    mysql: {from: mysql_dc2}
   jobs:
   - release: cf-mysql-custom
     name: arbitrator
+    consumes: 
+      mysql: {from: mysql_dc1}
+      mysql: {from: mysql_dc2}
     properties:
       cf_mysql:
         mysql:
@@ -88,14 +85,14 @@ instance_groups:
   networks: [{name: default_dc1}]
   vm_type: default
   stemcell: default
-  provides:
-    proxy: {as: proxy_dc1}
-  consumes: 
-    mysql: {from: mysql_dc1}
-    proxy: {from: proxy_dc1}
   jobs: 
   - name: proxy
     release: cf-mysql-custom
+    provides:
+      proxy: {as: proxy_dc1}
+    consumes: 
+      mysql: {from: mysql_dc1}
+      proxy: {from: proxy_dc1}
     properties:
       cf_mysql:
         proxy:
@@ -111,14 +108,14 @@ instance_groups:
   networks: [{name: default_dc2}]
   vm_type: default
   stemcell: default
-  provides:
-    proxy: {as: proxy_dc2}
-  consumes: 
-    mysql: {from: mysql_dc2}
-    proxy: {from: proxy_dc2}
   jobs: 
   - name: proxy
     release: cf-mysql-custom
+    provides:
+      proxy: {as: proxy_dc2}
+    consumes: 
+      mysql: {from: mysql_dc2}
+      proxy: {from: proxy_dc2}
     properties:
       cf_mysql:
         proxy:
@@ -137,14 +134,14 @@ instance_groups:
     - ((broker_ip_dc1))
   vm_type: default
   stemcell: default
-  provides:
-    broker: {as: broker_dc1}
-  consumes:
-    mysql: {from: mysql_dc1}
-    proxy: {from: proxy_dc1}
   jobs: 
   - name: cf-mysql-broker
     release: cf-mysql-custom
+    provides:
+      broker: {as: broker_dc1}
+    consumes:
+      mysql: {from: mysql_dc1}
+      proxy: {from: proxy_dc1}
     properties: 
       cf:
         api_url: ((cf_api_url_dc1))
@@ -198,14 +195,14 @@ instance_groups:
     - ((broker_ip_dc2))
   vm_type: default
   stemcell: default
-  provides:
-    broker: {as: broker_dc2}
-  consumes:
-    mysql: {from: mysql_dc2}
-    proxy: {from: proxy_dc2}
   jobs: 
   - name: cf-mysql-broker
     release: cf-mysql-custom
+    provides:
+      broker: {as: broker_dc2}
+    consumes:
+      mysql: {from: mysql_dc2}
+      proxy: {from: proxy_dc2}
     properties: 
       cf:
         api_url: ((cf_api_url_dc2))
@@ -314,11 +311,12 @@ instance_groups:
   networks: [{name: default_dc1}]
   vm_type: default
   stemcell: default
-  consume:
-    mysql: {from: mysql_dc1}
-    mysql: {from: mysql_dc2}
   jobs:
-  - {release: cf-mysql-custom, name: bootstrap}
+  - release: cf-mysql-custom
+    name: bootstrap
+    consumes:
+      mysql: {from: mysql_dc1}
+      mysql: {from: mysql_dc2}
 
 - name: rejoin-unsafe-vm
   instances: 1
@@ -327,11 +325,12 @@ instance_groups:
   networks: [{name: default_dc1}]
   vm_type: default
   stemcell: default
-  consume:
-    mysql: {from: mysql_dc1}
-    mysql: {from: mysql_dc2}
   jobs:
-  - {release: cf-mysql-custom, name: rejoin-unsafe}
+  - release: cf-mysql-custom
+    name: rejoin-unsafe
+    consumes:
+      mysql: {from: mysql_dc1}
+      mysql: {from: mysql_dc2}
 
 - name: verify-cluster-schemas-vm
   instances: 1
@@ -340,12 +339,12 @@ instance_groups:
   networks: [{name: default_dc1}]
   vm_type: default
   stemcell: default
-  consume:
-    mysql: {from: mysql_dc1}
-    mysql: {from: mysql_dc2}
   jobs:
   - name: verify-cluster-schemas
     release: cf-mysql-custom
+    consumes:
+      mysql: {from: mysql_dc1}
+      mysql: {from: mysql_dc2}
     properties:
       cf_mysql:
         mysql:
@@ -360,12 +359,12 @@ instance_groups:
   networks: [{name: default_dc1}]
   vm_type: default
   stemcell: default
-  consumes: 
-    mysql: {from: mysql_dc1}
-    proxy: {from: proxy_dc1}
   jobs:
   - name: smoke-tests
     release: cf-mysql-custom
+    consumes: 
+      mysql: {from: mysql_dc1}
+      proxy: {from: proxy_dc1}
     properties:
       cf:
         skip_ssl_validation: ((cf_skip_ssl_validation_dc1))
@@ -391,12 +390,12 @@ instance_groups:
   networks: [{name: default_dc2}]
   vm_type: default
   stemcell: default
-  consumes: 
-    mysql: {from: mysql_dc1}
-    proxy: {from: proxy_dc1}
   jobs:
   - name: smoke-tests
     release: cf-mysql-custom
+    consumes: 
+      mysql: {from: mysql_dc1}
+      proxy: {from: proxy_dc1}
     properties:
       cf:
         skip_ssl_validation: ((cf_skip_ssl_validation_dc2))
@@ -442,10 +441,6 @@ variables:
 releases:
 - name: cf-mysql-custom
   version: latest 
-- name: routing
-  version: "0.154.0"
-  url: https://bosh.io/d/github.com/cloudfoundry-incubator/cf-routing-release?v=0.154.0
-  sha1: 6f15de5699cbbce8a49ac3a1a49185460ef93f95
 
 stemcells:
 - alias: default
