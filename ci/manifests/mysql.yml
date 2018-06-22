@@ -58,6 +58,7 @@ instance_groups:
   vm_type: large
   stemcell: default
   persistent_disk: 10000
+  jobs:
   - name: mysql
     release: cf-mysql-custom
     provides:
