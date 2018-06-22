@@ -193,7 +193,7 @@ instance_groups:
           persistent_disk: 10000
 
 - name: broker_dc2
-  instances: 1
+  instances: 0
   azs: [dc2_z1]
   networks: 
   - name: default_dc2
