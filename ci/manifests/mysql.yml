@@ -197,8 +197,8 @@ instance_groups:
   azs: [dc2_z1]
   networks: 
   - name: default_dc2
-    static_ips:
-    - ((broker_ip_dc2))
+#    static_ips:
+#    - ((broker_ip_dc2))
   vm_type: default
   stemcell: default
   jobs: 
