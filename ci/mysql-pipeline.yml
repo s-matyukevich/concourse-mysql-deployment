@@ -72,6 +72,14 @@ jobs:
           BOSH_CLIENT_SECRET: ((bosh_client_secret))
           BOSH_CA_CERT: ((bosh_ca_cert))
           BOSH_ENVIRONMENT: ((bosh_environment))
+          CF_API_URL_DC1: {{cf_api_url_dc1}} 
+          CF_ADMIN_PASSWORD_DC1: ((cf_admin_password_dc1))
+          CF_SKIP_SSL_VALIDATION_DC1: {{cf_skip_ssl_validation_dc1}} 
+          CF_API_URL_DC2: {{cf_api_url_dc2}} 
+          CF_ADMIN_PASSWORD_DC2: ((cf_admin_password_dc2)) 
+          CF_SKIP_SSL_VALIDATION_DC2: {{cf_skip_ssl_validation_dc2}} 
+          BROKER_IP_DC1: {{broker_ip_dc1}}
+          BROKER_IP_DC2: {{broker_ip_dc2}} 
         inputs:
         - name: concourse-mysql-deployment
 
