@@ -8,7 +8,7 @@ resources:
   type: bosh-io-stemcell
   source:
     name: bosh-vsphere-esxi-ubuntu-trusty-go_agent
-    version: "3586.*"
+    version: "3586.24"
 - name: mysql-version
   type: concourse-version-resource
 
