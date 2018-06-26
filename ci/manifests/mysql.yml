@@ -10,9 +10,11 @@ update:
 
 instance_groups:
 - name: mysql_dc1
-  instances: 1
+  instances: 2
   azs: [dc1_z1]
-  networks: [{name: default_dc1}]
+  networks: 
+  - name: default_dc1
+    static_ips: ((mysql_ips_dc1))
   vm_type: large
   stemcell: default
   persistent_disk: 10000
@@ -22,8 +24,13 @@ instance_groups:
     provides:
       mysql: {as: mysql_dc1}
     consumes: 
-      mysql: {from: mysql_dc1}
-      mysql: {from: mysql_dc2}
+      mysql: &mysql_link
+        instances: ((combined_mysql_instances)) 
+        properties:
+          cf_mysql.mysql.port: 3306
+          cf_mysql.mysql.galera_healthcheck.port: 9200
+          cf_mysql.mysql.galera_healthcheck.endpoint_username: galera-healthcheck
+          cf_mysql.mysql.galera_healthcheck.endpoint_password: ((cf_mysql_mysql_galera_healthcheck_endpoint_password))
     properties: 
       cf_mysql:
         mysql:
@@ -52,9 +59,11 @@ instance_groups:
           db_password: ((cf_mysql_smoke_tests_db_password))
 
 - name: mysql_dc2
-  instances: 1
+  instances: 2
   azs: [dc2_z1]
-  networks: [{name: default_dc2}]
+  networks: 
+  - name: default_dc2
+    static_ips: ((mysql_ips_dc2))
   vm_type: large
   stemcell: default
   persistent_disk: 10000
@@ -64,8 +73,7 @@ instance_groups:
     provides:
       mysql: {as: mysql_dc2}
     consumes: 
-      mysql: {from: [mysql_dc1, mysql_dc2]}
-      #      mysql: {from: mysql_dc2}
+      mysql: *mysql_link
     properties: 
       cf_mysql:
         mysql:
@@ -90,8 +98,7 @@ instance_groups:
   - release: cf-mysql-custom
     name: arbitrator
     consumes: 
-      mysql: {from: mysql_dc1}
-      mysql: {from: mysql_dc2}
+      mysql: *mysql_link
     properties:
       cf_mysql:
         mysql:
@@ -102,7 +109,10 @@ instance_groups:
 - name: proxy_dc1
   instances: 1
   azs: [dc1_z1]
-  networks: [{name: default_dc1}]
+  networks: 
+  - name: default_dc1
+    static_ips: 
+    - ((proxy_ip_dc1))
   vm_type: default
   stemcell: default
   jobs: 
@@ -124,7 +134,10 @@ instance_groups:
 - name: proxy_dc2
   instances: 1
   azs: [dc2_z1]
-  networks: [{name: default_dc2}]
+  networks: 
+  - name: default_dc2
+    static_ips: 
+    - ((proxy_ip_dc2))
   vm_type: default
   stemcell: default
   jobs: 
@@ -339,8 +352,7 @@ instance_groups:
   - release: cf-mysql-custom
     name: bootstrap
     consumes:
-      mysql: {from: mysql_dc1}
-      mysql: {from: mysql_dc2}
+      mysql: *mysql_link
 
 - name: rejoin-unsafe-vm
   instances: 1
@@ -353,8 +365,7 @@ instance_groups:
   - release: cf-mysql-custom
     name: rejoin-unsafe
     consumes:
-      mysql: {from: mysql_dc1}
-      mysql: {from: mysql_dc2}
+      mysql: *mysql_link
 
 - name: verify-cluster-schemas-vm
   instances: 1
@@ -367,8 +378,7 @@ instance_groups:
   - name: verify-cluster-schemas
     release: cf-mysql-custom
     consumes:
-      mysql: {from: mysql_dc1}
-      mysql: {from: mysql_dc2}
+      mysql: *mysql_link
     properties:
       cf_mysql:
         mysql:
