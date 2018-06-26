@@ -69,7 +69,7 @@ instance_groups:
     properties: 
       cf_mysql:
         mysql:
-          enable_bootstrap: false
+          bootstrap_enabled: false
           innodb_buffer_pool_size: 128M
           max_connections: 1600
           admin_password: ((cf_mysql_mysql_admin_password))
