@@ -158,6 +158,7 @@ instance_groups:
           cookie_secret: ((cf_mysql_broker_cookie_secret))
           db_password: ((cf_mysql_broker_db_password))
           disable_quota_enforcer: true
+          port: 80
           services: &broker_services
           - name: mysql
             id: 44b26033-1f54-4087-b7bc-da9652c2a539
@@ -193,12 +194,12 @@ instance_groups:
           persistent_disk: 10000
 
 - name: broker_dc2
-  instances: 0
+  instances: 1
   azs: [dc2_z1]
   networks: 
   - name: default_dc2
-#    static_ips:
-#    - ((broker_ip_dc2))
+    static_ips:
+    - ((broker_ip_dc2))
   vm_type: default
   stemcell: default
   jobs: 
@@ -219,6 +220,7 @@ instance_groups:
           cookie_secret: ((cf_mysql_broker_cookie_secret))
           db_password: ((cf_mysql_broker_db_password))
           disable_quota_enforcer: true
+          port: 80
           services: *broker_services
         external_host: ((broker_ip_dc2))
         mysql:
