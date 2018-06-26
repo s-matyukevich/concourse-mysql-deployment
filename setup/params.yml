@@ -1,6 +1,8 @@
 concourse-mysql-deployment-git-url: https://github.com/s-matyukevich/concourse-mysql-deployment.git
-cf_mysql_release_url: https://github.com/cloudfoundry/cf-mysql-release.git
-cf_mysql_release_tag: v36.14.0
+#cf_mysql_release_url: https://github.com/cloudfoundry/cf-mysql-release.git
+#cf_mysql_release_tag: v36.14.0
+cf_mysql_release_url: https://github.com/s-matyukevich/cf-mysql-release.git
+cf_mysql_release_tag: bootstrap 
 cf_mysql_broker_url: https://github.com/s-matyukevich/cf-mysql-broker.git
 cf_api_url_dc1: https://api.us07-6-pcf3-system.oc.vmware.com
 cf_skip_ssl_validation_dc1: true
