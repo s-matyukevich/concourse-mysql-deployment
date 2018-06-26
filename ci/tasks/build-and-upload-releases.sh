@@ -9,7 +9,7 @@ git checkout $CF_MYSQL_RELEASE_TAG
 git_commit=$(git rev-parse  --short  HEAD)
 bosh_commit=$(bosh --json releases | jq -r '[.Tables[0].Rows[] | select(.name=="cf-mysql-custom")][0].commit_hash' | sed s/+//g)
 
-if [ "$git_commit" != "$bosh_commit"]; then
+if [ "$git_commit" != "$bosh_commit" ]; then
 	echo "------Building cf mysql release ------"
 	git submodule init
 	git submodule update
