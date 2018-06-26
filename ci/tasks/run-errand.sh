@@ -2,5 +2,5 @@
 
 set -o pipefail
 
-bosh -n run-errand $BOSH_ERRAND
+bosh -n -d mysql run-errand $BOSH_ERRAND
 
