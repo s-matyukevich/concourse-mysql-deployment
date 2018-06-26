@@ -136,3 +136,54 @@ jobs:
         inputs:		
         - name: concourse-mysql-deployment
 
+- name: smoke-tests-dc1
+  plan:
+    - aggregate:
+      - get: mysql-version 
+        passed: [register-broker-dc1]
+        trigger: true
+      - get: concourse-mysql-deployment
+    - task: register-broker		
+      config:		
+        platform: linux		
+        image_resource:		
+          type: docker-image		
+          source:		
+            repository: smatyukevich/docker-cfbosh
+            tag: latest
+        run:		
+          path: concourse-mysql-deployment/ci/tasks/run-errand.sh		
+        params:		
+          BOSH_ERRAND: smoke-tests-vm-dc1		
+          BOSH_CLIENT: ((bosh_client)) 
+          BOSH_CLIENT_SECRET: ((bosh_client_secret))
+          BOSH_CA_CERT: ((bosh_ca_cert))
+          BOSH_ENVIRONMENT: ((bosh_environment))
+        inputs:		
+        - name: concourse-mysql-deployment
+
+- name: smoke-tests-dc2
+  plan:
+    - aggregate:
+      - get: mysql-version 
+        passed: [register-broker-dc2]
+        trigger: true
+      - get: concourse-mysql-deployment
+    - task: register-broker		
+      config:		
+        platform: linux		
+        image_resource:		
+          type: docker-image		
+          source:		
+            repository: smatyukevich/docker-cfbosh
+            tag: latest
+        run:		
+          path: concourse-mysql-deployment/ci/tasks/run-errand.sh		
+        params:		
+          BOSH_ERRAND: smoke-tests-vm-dc2		
+          BOSH_CLIENT: ((bosh_client)) 
+          BOSH_CLIENT_SECRET: ((bosh_client_secret))
+          BOSH_CA_CERT: ((bosh_ca_cert))
+          BOSH_ENVIRONMENT: ((bosh_environment))
+        inputs:		
+        - name: concourse-mysql-deployment
