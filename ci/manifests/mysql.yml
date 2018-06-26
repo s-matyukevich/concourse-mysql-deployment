@@ -246,6 +246,8 @@ instance_groups:
       cf_mysql:
         broker:
           auth_password: ((cf_mysql_broker_auth_password))
+          port: 80
+          protocol: http
           services: *broker_services
         external_host: ((broker_ip_dc1))
 
@@ -267,6 +269,8 @@ instance_groups:
         skip_ssl_validation: ((cf_skip_ssl_validation_dc2))
       cf_mysql:
         broker:
+          port: 80
+          protocol: http
           auth_password: ((cf_mysql_broker_auth_password))
           services: *broker_services
         external_host: ((broker_ip_dc1))
