@@ -2,10 +2,10 @@
 
 set -o pipefail
 
-mysql_ips_dc1_raw=${MYSQL_IPS_DC1/[/}}
-mysql_ips_dc1_raw=${mysql_ips_dc1_raw/]/}}
-mysql_ips_dc2_raw=${MYSQL_IPS_DC2/[/}}
-mysql_ips_dc2_raw=${mysql_ips_dc2_raw/]/}}
+mysql_ips_dc1_raw=${MYSQL_IPS_DC1/[/}
+mysql_ips_dc1_raw=${mysql_ips_dc1_raw/]/}
+mysql_ips_dc2_raw=${MYSQL_IPS_DC2/[/}
+mysql_ips_dc2_raw=${mysql_ips_dc2_raw/]/}
 combined_ips="[$mysql_ips_dc1_raw,$mysql_ips_dc2_raw]"
 combined_instances=$(echo "$combined_ips" | yaml2json | jq "map_values({address: .})")
 bosh -n -d mysql deploy concourse-mysql-deployment/ci/manifests/mysql.yml \
