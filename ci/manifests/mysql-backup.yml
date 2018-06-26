@@ -64,8 +64,8 @@ instance_groups:
     provides:
       mysql: {as: mysql_dc2}
     consumes: 
-      mysql: {from: [mysql_dc1, mysql_dc2]}
-      #      mysql: {from: mysql_dc2}
+      mysql: {from: mysql_dc1}
+      mysql: {from: mysql_dc2}
     properties: 
       cf_mysql:
         mysql:

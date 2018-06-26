@@ -5,6 +5,10 @@ set -o pipefail
 git clone $CF_MYSQL_RELEASE_URL
 cd cf-mysql-release 
 git checkout $CF_MYSQL_RELEASE_TAG
+
+cur_commit=$(git rev-parse  --short  HEAD)
+bosh_commit=$(bosh --json releases | jq -r '[.Tables[0].Rows[] | select(.name=="cf-mysql-custom")][0].commit_hash')
+
 git submodule init
 git submodule update
 #Update cf broker in the standard release
