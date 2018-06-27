@@ -149,7 +149,6 @@ jobs:
     - aggregate:
       - get: concourse-mysql-deployment
       - get: daily
-        passed: [register-broker-dc2]
         trigger: true
     - task: backup		
       config:		
