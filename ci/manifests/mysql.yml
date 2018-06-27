@@ -489,6 +489,8 @@ variables:
 releases:
 - name: cf-mysql-custom
   version: latest 
+- name: wavefront-proxy
+  version: latest
 
 stemcells:
 - alias: default
