@@ -58,7 +58,7 @@ instance_groups:
         smoke_tests:
           db_password: ((cf_mysql_smoke_tests_db_password))
   - name: telegraf-agent
-    release: itelegraf-agent
+    release: telegraf-agent
     consumes: 
       proxy_conn: {from: proxy_conn_dc1}
     properties: 
@@ -94,7 +94,7 @@ instance_groups:
             endpoint_password: ((cf_mysql_mysql_galera_healthcheck_endpoint_password))
             db_password: ((cf_mysql_mysql_galera_healthcheck_db_password))
   - name: telegraf-agent
-    release: itelegraf-agent
+    release: telegraf-agent
     consumes: 
       proxy_conn: {from: proxy_conn_dc2}
     properties: 
