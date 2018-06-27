@@ -52,7 +52,7 @@ jobs:
     - aggregate:
       - get: mysql-version 
         passed: [build-and-upload-releases]
-        #        trigger: true
+        trigger: true
       - get: concourse-mysql-deployment
     - task: deploy
       config:
