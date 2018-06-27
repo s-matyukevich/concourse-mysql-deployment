@@ -521,6 +521,8 @@ releases:
   version: latest 
 - name: wavefront-proxy
   version: latest
+- name: telegraf-agent 
+  version: latest
 
 stemcells:
 - alias: default
