@@ -12,7 +12,7 @@ friendly_hostname: mysql-proxy
 stemcell_version: 3586.24
 cf_api_url_dc1: https://api.us07-6-pcf3-system.oc.vmware.com
 cf_skip_ssl_validation_dc1: true
-cf_api_url_dc2: https://api.us07-6-pcf2-system.oc.vmware.com
+cf_api_url_dc2: us07-6-pcf1-system.oc.vmware.com
 cf_skip_ssl_validation_dc2: true
 mysql_ips_dc1: "[10.191.9.130,10.191.9.131]"
 mysql_ips_dc2: "[10.165.19.130,10.165.19.131]"
@@ -20,3 +20,4 @@ proxy_ip_dc1: 10.191.9.132
 proxy_ip_dc2: 10.165.19.132
 broker_ip_dc1: 10.191.9.133
 broker_ip_dc2: 10.165.19.133
+backup_ip_dc1:  10.191.9.134

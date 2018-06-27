@@ -6,7 +6,7 @@ mysql_ips_dc1_raw=${MYSQL_IPS_DC1/[/}
 mysql_ips_dc1_raw=${mysql_ips_dc1_raw/]/}
 mysql_ips_dc2_raw=${MYSQL_IPS_DC2/[/}
 mysql_ips_dc2_raw=${mysql_ips_dc2_raw/]/}
-combined_ips="[$mysql_ips_dc1_raw,$mysql_ips_dc2_raw]"
+combined_ips="[$mysql_ips_dc1_raw,$mysql_ips_dc2_raw,$BACKUP_IP_DC1]"
 combined_instances=$(echo "$combined_ips" | yaml2json | jq "map_values({address: .})")
 bosh -n -d mysql deploy concourse-mysql-deployment/ci/manifests/mysql.yml \
     -v cf_api_url_dc1=$CF_API_URL_DC1 \
@@ -24,5 +24,6 @@ bosh -n -d mysql deploy concourse-mysql-deployment/ci/manifests/mysql.yml \
     -v proxy_ip_dc1=$PROXY_IP_DC1 \
     -v proxy_ip_dc2=$PROXY_IP_DC2 \
     -v broker_ip_dc1=$BROKER_IP_DC1 \
-    -v broker_ip_dc2=$BROKER_IP_DC2 
+    -v broker_ip_dc2=$BROKER_IP_DC2 \
+    -v backup_ip_dc1=$BACKUP_IP_DC1  
 

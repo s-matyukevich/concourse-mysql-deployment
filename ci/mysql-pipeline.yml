@@ -6,6 +6,9 @@ resources:
     private_key: ((git_private_key))
 - name: mysql-version
   type: concourse-version-resource
+- name: daily
+  type: time
+  source: {interval: 24h}
 
 
 resource_types:
@@ -83,7 +86,8 @@ jobs:
           PROXY_IP_DC1: {{proxy_ip_dc1}}
           PROXY_IP_DC2: {{proxy_ip_dc2}}
           BROKER_IP_DC1: {{broker_ip_dc1}}
-          BROKER_IP_DC2: {{broker_ip_dc2}} 
+          BROKER_IP_DC2: {{broker_ip_dc2}}
+          BACKUP_IP_DC1: {{backup_ip_dc1}} 
         inputs:
         - name: concourse-mysql-deployment
 
@@ -131,6 +135,32 @@ jobs:
             tag: latest
         run:		
           path: concourse-mysql-deployment/ci/tasks/run-errand.sh		
+        params:		
+          BOSH_ERRAND: broker-registrar-vm-dc2		
+          BOSH_CLIENT: ((bosh_client)) 
+          BOSH_CLIENT_SECRET: ((bosh_client_secret))
+          BOSH_CA_CERT: ((bosh_ca_cert))
+          BOSH_ENVIRONMENT: ((bosh_environment))
+        inputs:		
+        - name: concourse-mysql-deployment
+
+- name: backup 
+  plan:
+    - aggregate:
+      - get: concourse-mysql-deployment
+      - get: daily
+        passed: [register-broker-dc2]
+        trigger: true
+    - task: backup		
+      config:		
+        platform: linux		
+        image_resource:		
+          type: docker-image		
+          source:		
+            repository: smatyukevich/docker-cfbosh
+            tag: latest
+        run:		
+          path: concourse-mysql-deployment/ci/tasks/backup.sh		
         params:		
           BOSH_ERRAND: broker-registrar-vm-dc2		
           BOSH_CLIENT: ((bosh_client)) 
