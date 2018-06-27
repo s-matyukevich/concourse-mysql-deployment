@@ -24,19 +24,9 @@ if [ "$git_commit" != "$bosh_commit" ]; then
 fi
 cd ..
 
-git clone $WAVEFRONT_PROXY_RELEASE_URL
-cd cloud-foundry-release/proxy-bosh-release
-git_commit=$(git rev-parse  --short  HEAD)
-bosh_commit=$(bosh --json releases | jq -r '[.Tables[0].Rows[] | select(.name=="cf-mysql-custom")][0].commit_hash' | sed s/+//g)
-
-if [ "$git_commit" != "$bosh_commit" ]; then
-	echo "------Building wavefront release ------"
-	bosh create-release --final --name wavefront-proxy --tarball wavefront-release.tgz
-	bosh -n upload-release wavefront-release.tgz
+if !bosh --json releases | jq -e '.Tables[0].Rows[] | select(.name=="wavefront-proxy")' > /dev/null; then
+	bosh -n upload-release $WAVEFRONT_PROXY_RELEASE_URL
 fi
-cd ../..
-
-
 
 # Build custom release
 #git clone $VMWARE_MYSQL_RELEASE_URL
