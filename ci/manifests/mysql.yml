@@ -133,7 +133,7 @@ instance_groups:
       mysql_password: ((cf_mysql_mysql_admin_password))
 
 - name: backup
-  instances: 2
+  instances: 1
   azs: [dc1_z1]
   networks: 
   - name: default_dc1
