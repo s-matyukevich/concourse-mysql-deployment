@@ -57,6 +57,12 @@ instance_groups:
       cf_mysql:
         smoke_tests:
           db_password: ((cf_mysql_smoke_tests_db_password))
+  - name: telegraf-agent
+    release: itelegraf-agent
+    consumes: 
+      proxy_conn: {from: proxy_conn_dc1}
+    properties: 
+      mysql_password: ((cf_mysql_mysql_admin_password))
 
 - name: mysql_dc2
   instances: 2
@@ -87,6 +93,12 @@ instance_groups:
           galera_healthcheck:
             endpoint_password: ((cf_mysql_mysql_galera_healthcheck_endpoint_password))
             db_password: ((cf_mysql_mysql_galera_healthcheck_db_password))
+  - name: telegraf-agent
+    release: itelegraf-agent
+    consumes: 
+      proxy_conn: {from: proxy_conn_dc2}
+    properties: 
+      mysql_password: ((cf_mysql_mysql_admin_password))
 
 - name: arbitrator
   instances: 1
@@ -448,7 +460,7 @@ instance_groups:
           password: ((cf_mysql_smoke_tests_password))
           standalone_tests_only: false
 
-- name: wavefront-proxy 
+- name: wavefront-proxy-dc1 
   instances: 1
   azs: [dc1_z1]
   networks: [{name: default_dc1}]
@@ -457,6 +469,24 @@ instance_groups:
   jobs:
   - name: wavefront_proxy
     release: wavefront-proxy
+    provides:
+      proxy_conn: {as: proxy_conn_dc1}
+    properties:
+      wavefront_url: ((wavefront_url))
+      wavefront_token: ((wavefront_token))
+      friendly_hostname: ((friendly_hostname))
+
+- name: wavefront-proxy-dc2 
+  instances: 1
+  azs: [dc1_z1]
+  networks: [{name: default_dc2}]
+  vm_type: default
+  stemcell: default
+  jobs:
+  - name: wavefront_proxy
+    release: wavefront-proxy
+    provides:
+      proxy_conn: {as: proxy_conn_dc2}
     properties:
       wavefront_url: ((wavefront_url))
       wavefront_token: ((wavefront_token))
