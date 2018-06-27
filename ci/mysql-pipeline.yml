@@ -20,7 +20,33 @@ resource_types:
 
 
 jobs:
-- name: build-and-upload-releases
+- name: build-mysql-release
+  plan:
+    - aggregate:
+      - get: concourse-mysql-deployment
+    - task: build-mysql-release
+      config:
+        platform: linux
+        image_resource:
+          type: docker-image
+          source:
+            repository: smatyukevich/docker-cfbosh
+            tag: latest
+        run:
+          path: concourse-mysql-deployment/ci/tasks/build-mysql-release.sh 
+        params:
+          BOSH_CLIENT: ((bosh_client)) 
+          BOSH_CLIENT_SECRET: ((bosh_client_secret))
+          BOSH_CA_CERT: ((bosh_ca_cert))
+          BOSH_ENVIRONMENT: ((bosh_environment))
+          CF_MYSQL_RELEASE_URL: {{cf_mysql_release_url}}
+          CF_MYSQL_RELEASE_TAG: {{cf_mysql_release_tag}}
+          CF_MYSQL_BROKER_URL: {{cf_mysql_broker_url}}
+        inputs:
+        - name: concourse-mysql-deployment
+    - put: mysql-version
+
+- name: build-telegraf-agent-release
   plan:
     - aggregate:
       - get: concourse-mysql-deployment
@@ -33,17 +59,60 @@ jobs:
             repository: smatyukevich/docker-cfbosh
             tag: latest
         run:
-          path: concourse-mysql-deployment/ci/tasks/build-and-upload-releases.sh 
+          path: concourse-mysql-deployment/ci/tasks/build-telegraf-agent-release.sh 
         params:
           BOSH_CLIENT: ((bosh_client)) 
           BOSH_CLIENT_SECRET: ((bosh_client_secret))
           BOSH_CA_CERT: ((bosh_ca_cert))
           BOSH_ENVIRONMENT: ((bosh_environment))
-          CF_MYSQL_RELEASE_URL: {{cf_mysql_release_url}}
-          CF_MYSQL_RELEASE_TAG: {{cf_mysql_release_tag}}
-          CF_MYSQL_BROKER_URL: {{cf_mysql_broker_url}}
-          WAVEFRONT_PROXY_RELEASE_URL: {{wavefront_proxy_release_url}}
           TELEGRAF_AGENT_RELEASE_URL: {{telegraf_agent_release_url}}
+        inputs:
+        - name: concourse-mysql-deployment
+    - put: mysql-version
+
+- name: upload-proxy-release
+  plan:
+    - aggregate:
+      - get: concourse-mysql-deployment
+    - task: upload-proxy-release
+      config:
+        platform: linux
+        image_resource:
+          type: docker-image
+          source:
+            repository: smatyukevich/docker-cfbosh
+            tag: latest
+        run:
+          path: concourse-mysql-deployment/ci/tasks/upload-proxy-release.sh 
+        params:
+          BOSH_CLIENT: ((bosh_client)) 
+          BOSH_CLIENT_SECRET: ((bosh_client_secret))
+          BOSH_CA_CERT: ((bosh_ca_cert))
+          BOSH_ENVIRONMENT: ((bosh_environment))
+          WAVEFRONT_PROXY_RELEASE_URL: {{wavefront_proxy_release_url}}
+        inputs:
+        - name: concourse-mysql-deployment
+    - put: mysql-version
+
+- name: upload-stemcell
+  plan:
+    - aggregate:
+      - get: concourse-mysql-deployment
+    - task: upload-stemcell
+      config:
+        platform: linux
+        image_resource:
+          type: docker-image
+          source:
+            repository: smatyukevich/docker-cfbosh
+            tag: latest
+        run:
+          path: concourse-mysql-deployment/ci/tasks/upload-stemcell.sh 
+        params:
+          BOSH_CLIENT: ((bosh_client)) 
+          BOSH_CLIENT_SECRET: ((bosh_client_secret))
+          BOSH_CA_CERT: ((bosh_ca_cert))
+          BOSH_ENVIRONMENT: ((bosh_environment))
           STEMCELL_URL: {{stemcell_url}}
           STEMCELL_VERSION: {{stemcell_version}}
         inputs:
@@ -54,7 +123,7 @@ jobs:
   plan:
     - aggregate:
       - get: mysql-version 
-        passed: [build-and-upload-releases]
+        passed: [build-mysql-release, build-telegraf-agent-release, upload-proxy-release, upload-stemcell]
         trigger: true
       - get: concourse-mysql-deployment
     - task: deploy
