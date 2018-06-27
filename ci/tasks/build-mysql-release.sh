@@ -16,5 +16,5 @@ git fetch fork
 git checkout fork/master
 cd ../..
 bosh create-release --name cf-mysql-custom --timestamp-version --force --tarball cf-mysql-release.tgz
-bosh -n upload-release cf-mysql-release/cf-mysql-release.tgz
+bosh -n upload-release cf-mysql-release.tgz
 
