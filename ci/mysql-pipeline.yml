@@ -40,6 +40,7 @@ jobs:
           CF_MYSQL_RELEASE_TAG: {{cf_mysql_release_tag}}
           CF_MYSQL_BROKER_URL: {{cf_mysql_broker_url}}
           WAVEFRONT_PROXY_RELEASE_URL: {{wavefront_proxy_release_url}}
+          TELEGRAF_AGENT_RELEASE_URL: {{telegraf_agent_release_url}}
           STEMCELL_URL: {{stemcell_url}}
           STEMCELL_VERSION: {{stemcell_version}}
         inputs:
