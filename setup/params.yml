@@ -4,6 +4,7 @@ concourse-mysql-deployment-git-url: https://github.com/s-matyukevich/concourse-m
 cf_mysql_release_url: https://github.com/s-matyukevich/cf-mysql-release.git
 cf_mysql_release_tag: bootstrap 
 cf_mysql_broker_url: https://github.com/s-matyukevich/cf-mysql-broker.git
+wavefront_proxy_release_url: https://github.com/wavefrontHQ/cloud-foundry-release.git
 stemcell_url: https://bosh.io/d/stemcells/bosh-vsphere-esxi-ubuntu-trusty-go_agent?v= 
 stemcell_version: 3586.24
 cf_api_url_dc1: https://api.us07-6-pcf3-system.oc.vmware.com
