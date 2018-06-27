@@ -4,11 +4,6 @@ resources:
   source:
     uri: {{concourse-mysql-deployment-git-url}}
     private_key: ((git_private_key))
-- name: vsphere-stemcell
-  type: bosh-io-stemcell
-  source:
-    name: bosh-vsphere-esxi-ubuntu-trusty-go_agent
-    version: "3586.24"
 - name: mysql-version
   type: concourse-version-resource
 
@@ -26,7 +21,6 @@ jobs:
   plan:
     - aggregate:
       - get: concourse-mysql-deployment
-      - get: vsphere-stemcell
     - task: build-and-upload-releases
       config:
         platform: linux
@@ -50,7 +44,6 @@ jobs:
           STEMCELL_VERSION: {{stemcell_version}}
         inputs:
         - name: concourse-mysql-deployment
-        - name: vsphere-stemcell
     - put: mysql-version
 
 - name: deploy 
