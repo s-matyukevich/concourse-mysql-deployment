@@ -448,6 +448,20 @@ instance_groups:
           password: ((cf_mysql_smoke_tests_password))
           standalone_tests_only: false
 
+- name: wavefront-proxy 
+  instances: 1
+  azs: [dc1_z1]
+  networks: [{name: default_dc1}]
+  vm_type: default
+  stemcell: default
+  jobs:
+  - name: 
+    release: wavefront-proxy
+    properties:
+      wavefront_url: ((wavefront_url))
+      wavefront_token: ((wavefront_token))
+      friendly_hostname: ((friendly_hostname))
+
 variables:
 - name: cf_mysql_mysql_admin_password
   type: password

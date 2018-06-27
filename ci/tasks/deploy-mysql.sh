@@ -15,6 +15,9 @@ bosh -n -d mysql deploy concourse-mysql-deployment/ci/manifests/mysql.yml \
     -v cf_api_url_dc2=$CF_API_URL_DC2 \
     -v cf_admin_password_dc2=$CF_ADMIN_PASSWORD_DC2 \
     -v cf_skip_ssl_validation_dc2=$CF_SKIP_SSL_VALIDATION_DC2 \
+    -v wavefront_url=$WAVEFRONT_URL \
+    -v wavefront_token=$WAVEFRONT_TOKEN \
+    -v friendly_hostname=$FRIENDLY_HOSTNAME \
     -v mysql_ips_dc1=$MYSQL_IPS_DC1 \
     -v mysql_ips_dc2=$MYSQL_IPS_DC2 \
     -v combined_mysql_instances="$combined_instances" \

@@ -5,7 +5,9 @@ cf_mysql_release_url: https://github.com/s-matyukevich/cf-mysql-release.git
 cf_mysql_release_tag: bootstrap 
 cf_mysql_broker_url: https://github.com/s-matyukevich/cf-mysql-broker.git
 wavefront_proxy_release_url: https://github.com/s-matyukevich/cloud-foundry-release/releases/download/v0.0.1/wavefront-proxy-1.tgz
-stemcell_url: https://bosh.io/d/stemcells/bosh-vsphere-esxi-ubuntu-trusty-go_agent?v= 
+stemcell_url: https://bosh.io/d/stemcells/bosh-vsphere-esxi-ubuntu-trusty-go_agent?v=
+wavefront_url: https://try.wavefront.com/api
+friendly_hostname: mysql-proxy 
 stemcell_version: 3586.24
 cf_api_url_dc1: https://api.us07-6-pcf3-system.oc.vmware.com
 cf_skip_ssl_validation_dc1: true
