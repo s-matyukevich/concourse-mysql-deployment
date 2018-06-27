@@ -478,7 +478,7 @@ instance_groups:
 
 - name: wavefront-proxy-dc2 
   instances: 1
-  azs: [dc1_z1]
+  azs: [dc2_z1]
   networks: [{name: default_dc2}]
   vm_type: default
   stemcell: default
