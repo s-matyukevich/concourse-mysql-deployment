@@ -9,6 +9,38 @@ update:
   serial: true
 
 instance_groups:
+- name: wavefront-proxy-dc1 
+  instances: 1
+  azs: [dc1_z1]
+  networks: [{name: default_dc1}]
+  vm_type: default
+  stemcell: default
+  jobs:
+  - name: wavefront_proxy
+    release: wavefront-proxy
+    provides:
+      proxy_conn: {as: proxy_conn_dc1}
+    properties:
+      wavefront_url: ((wavefront_url))
+      wavefront_token: ((wavefront_token))
+      friendly_hostname: ((friendly_hostname))
+
+- name: wavefront-proxy-dc2 
+  instances: 1
+  azs: [dc2_z1]
+  networks: [{name: default_dc2}]
+  vm_type: default
+  stemcell: default
+  jobs:
+  - name: wavefront_proxy
+    release: wavefront-proxy
+    provides:
+      proxy_conn: {as: proxy_conn_dc2}
+    properties:
+      wavefront_url: ((wavefront_url))
+      wavefront_token: ((wavefront_token))
+      friendly_hostname: ((friendly_hostname))
+
 - name: mysql_dc1
   instances: 2
   azs: [dc1_z1]
@@ -460,37 +492,6 @@ instance_groups:
           password: ((cf_mysql_smoke_tests_password))
           standalone_tests_only: false
 
-- name: wavefront-proxy-dc1 
-  instances: 1
-  azs: [dc1_z1]
-  networks: [{name: default_dc1}]
-  vm_type: default
-  stemcell: default
-  jobs:
-  - name: wavefront_proxy
-    release: wavefront-proxy
-    provides:
-      proxy_conn: {as: proxy_conn_dc1}
-    properties:
-      wavefront_url: ((wavefront_url))
-      wavefront_token: ((wavefront_token))
-      friendly_hostname: ((friendly_hostname))
-
-- name: wavefront-proxy-dc2 
-  instances: 1
-  azs: [dc2_z1]
-  networks: [{name: default_dc2}]
-  vm_type: default
-  stemcell: default
-  jobs:
-  - name: wavefront_proxy
-    release: wavefront-proxy
-    provides:
-      proxy_conn: {as: proxy_conn_dc2}
-    properties:
-      wavefront_url: ((wavefront_url))
-      wavefront_token: ((wavefront_token))
-      friendly_hostname: ((friendly_hostname))
 
 variables:
 - name: cf_mysql_mysql_admin_password
