@@ -455,7 +455,7 @@ instance_groups:
   vm_type: default
   stemcell: default
   jobs:
-  - name: 
+  - name: wavefront-proxy
     release: wavefront-proxy
     properties:
       wavefront_url: ((wavefront_url))
