@@ -6,6 +6,19 @@ resources:
     private_key: ((git_private_key))
 - name: mysql-version
   type: concourse-version-resource
+
+- name: mysql-release-version
+  type: concourse-version-resource
+
+- name: telegraf-agent-version
+  type: concourse-version-resource
+
+- name: proxy-version
+  type: concourse-version-resource
+
+- name: stemcell-version
+  type: concourse-version-resource
+
 - name: daily
   type: time
   source: {interval: 24h}
@@ -44,13 +57,13 @@ jobs:
           CF_MYSQL_BROKER_URL: {{cf_mysql_broker_url}}
         inputs:
         - name: concourse-mysql-deployment
-    - put: mysql-version
+    - put: mysql-release-version
 
 - name: build-telegraf-agent-release
   plan:
     - aggregate:
       - get: concourse-mysql-deployment
-    - task: build-and-upload-releases
+    - task: build-telegraf-agent-release
       config:
         platform: linux
         image_resource:
@@ -68,7 +81,7 @@ jobs:
           TELEGRAF_AGENT_RELEASE_URL: {{telegraf_agent_release_url}}
         inputs:
         - name: concourse-mysql-deployment
-    - put: mysql-version
+    - put: telegraf-agent-version
 
 - name: upload-proxy-release
   plan:
@@ -92,7 +105,7 @@ jobs:
           WAVEFRONT_PROXY_RELEASE_URL: {{wavefront_proxy_release_url}}
         inputs:
         - name: concourse-mysql-deployment
-    - put: mysql-version
+    - put: proxy-version
 
 - name: upload-stemcell
   plan:
@@ -117,13 +130,22 @@ jobs:
           STEMCELL_VERSION: {{stemcell_version}}
         inputs:
         - name: concourse-mysql-deployment
-    - put: mysql-version
+    - put: stemcell-version
 
 - name: deploy 
   plan:
     - aggregate:
-      - get: mysql-version 
-        passed: [build-mysql-release, build-telegraf-agent-release, upload-proxy-release, upload-stemcell]
+      - get: mysql-release-version 
+        passed: [build-mysql-release]
+        trigger: true
+      - get: telegraf-agent-version 
+        passed: [build-telegraf-agent-release]
+        trigger: true
+      - get: proxy-version 
+        passed: [upload-proxy-release]
+        trigger: true
+      - get: stemcell-version 
+        passed: [upload-stemcell]
         trigger: true
       - get: concourse-mysql-deployment
     - task: deploy
@@ -159,6 +181,7 @@ jobs:
           BACKUP_IP_DC1: {{backup_ip_dc1}} 
         inputs:
         - name: concourse-mysql-deployment
+    - put: mysql-version
 
 - name: register-broker-dc1
   plan:
