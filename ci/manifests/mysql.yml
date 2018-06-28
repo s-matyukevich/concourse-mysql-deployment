@@ -302,6 +302,7 @@ instance_groups:
     release: telegraf-agent
     properties:
       all_hosts: "((proxy_ip_dc1)),((proxy_ip_dc2))" 
+      datacenter: dc1
 
 - name: broker_dc2
   instances: 1
@@ -339,6 +340,7 @@ instance_groups:
     release: telegraf-agent
     properties:
       all_hosts: "((proxy_ip_dc2)),((proxy_ip_dc1))" 
+      datacenter: dc1
 
 
 - name: broker-registrar-vm-dc1
