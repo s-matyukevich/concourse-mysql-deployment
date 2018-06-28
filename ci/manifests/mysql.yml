@@ -389,7 +389,7 @@ instance_groups:
           protocol: http
           auth_password: ((cf_mysql_broker_auth_password))
           services: *broker_services
-        external_host: ((broker_ip_dc1))
+        external_host: ((broker_ip_dc2))
 
 
 - name: deregister-and-purge-instances-vm-dc1
