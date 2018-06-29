@@ -159,6 +159,7 @@ jobs:
         run:
           path: concourse-mysql-deployment/ci/tasks/deploy-mysql.sh 
         params:
+          CONCOURSE_TEAM: {{concourse_team}}
           BOSH_CLIENT: ((bosh_client)) 
           BOSH_CLIENT_SECRET: ((bosh_client_secret))
           BOSH_CA_CERT: ((bosh_ca_cert))

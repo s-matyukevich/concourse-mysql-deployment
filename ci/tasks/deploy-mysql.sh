@@ -9,6 +9,7 @@ mysql_ips_dc2_raw=${mysql_ips_dc2_raw/]/}
 combined_ips="[$mysql_ips_dc1_raw,$mysql_ips_dc2_raw,$BACKUP_IP_DC1]"
 combined_instances=$(echo "$combined_ips" | yaml2json | jq "map_values({address: .})")
 bosh -n -d mysql deploy concourse-mysql-deployment/ci/manifests/mysql.yml \
+    --vars-store=creds.yml \
     -v cf_api_url_dc1=$CF_API_URL_DC1 \
     -v cf_admin_password_dc1=$CF_ADMIN_PASSWORD_DC1 \
     -v cf_skip_ssl_validation_dc1=$CF_SKIP_SSL_VALIDATION_DC1 \
@@ -27,3 +28,5 @@ bosh -n -d mysql deploy concourse-mysql-deployment/ci/manifests/mysql.yml \
     -v broker_ip_dc2=$BROKER_IP_DC2 \
     -v backup_ip_dc1=$BACKUP_IP_DC1  
 
+vault write /concourse/$CONCOURSE_TEAM/mysql_creds value=@creds.yml 
+	

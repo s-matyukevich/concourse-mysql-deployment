@@ -1,15 +1,18 @@
 concourse-mysql-deployment-git-url: https://github.com/s-matyukevich/concourse-mysql-deployment.git
+concourse_team: sandbox-pcf1
+
 #cf_mysql_release_url: https://github.com/cloudfoundry/cf-mysql-release.git
 #cf_mysql_release_tag: v36.14.0
-cf_mysql_release_url: https://github.com/s-matyukevich/cf-mysql-release.git
-cf_mysql_release_tag: bootstrap 
+
+cf_mysql_release_url: https://github.com/s-matyukevich/cf-mysql-release.git # will be able to switch to upstream release after this PR will be merged  https://github.com/cloudfoundry/cf-mysql-release/pull/212
+cf_mysql_release_tag: bootstrap
 cf_mysql_broker_url: https://github.com/s-matyukevich/cf-mysql-broker.git
 wavefront_proxy_release_url: https://github.com/s-matyukevich/cloud-foundry-release/releases/download/v0.0.1/wavefront-proxy-1.tgz
 telegraf_agent_release_url: https://github.com/s-matyukevich/telegraf-agent-bosh-release.git
 stemcell_url: https://bosh.io/d/stemcells/bosh-vsphere-esxi-ubuntu-trusty-go_agent?v=
+stemcell_version: 3586.24
 wavefront_url: https://try.wavefront.com/api
 friendly_hostname: mysql-proxy 
-stemcell_version: 3586.24
 cf_api_url_dc1: https://api.us07-6-pcf3-system.oc.vmware.com
 cf_skip_ssl_validation_dc1: true
 cf_api_url_dc2: https://api.us07-6-pcf1-system.oc.vmware.com
