@@ -2,6 +2,11 @@
 
 set -o pipefail
 
+mysql_creds=$(vault read -field=value /concourse/$CONCOURSE_TEAM/mysql_creds || true)
+if [ "$mysql_creds" ]; then
+  echo "$mysql_creds" > creds.yml 
+fi
+
 mysql_ips_dc1_raw=${MYSQL_IPS_DC1/[/}
 mysql_ips_dc1_raw=${mysql_ips_dc1_raw/]/}
 mysql_ips_dc2_raw=${MYSQL_IPS_DC2/[/}

@@ -1,6 +1,9 @@
 concourse-mysql-deployment-git-url: https://github.com/s-matyukevich/concourse-mysql-deployment.git
 concourse_team: sandbox-pcf1
 
+vault-addr: https://us07-1-cc2.oc.vmware.com:8200
+vault-token: ((vault_token))
+
 #cf_mysql_release_url: https://github.com/cloudfoundry/cf-mysql-release.git
 #cf_mysql_release_tag: v36.14.0
 
